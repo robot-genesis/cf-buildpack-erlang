@@ -33,6 +33,8 @@ ls ${home_dir}
 echo "CURRENT_DIR"
 pwd
 
+whereis erl
+whereis escript
 
 cp ${home_dir}/opt/rebar3 ./
 ./rebar3 release 2>&1 | sed -u 's/^/       /'
