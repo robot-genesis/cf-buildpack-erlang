@@ -47,17 +47,19 @@ LIB_URL="http://mirrors.kernel.org/ubuntu/pool/main/l/lksctp-tools/${LIB_SCTP}"
     ls -hl ${CACHE_DIR} | sed 's/^/         /'
 
     # If (in cache) exit this code block
-    test -f ${CACHE_DIR}/${OTP_PACKAGE} && exit
-    # Not cached, so download and cache dependency
-    echo "-------> Fetching Erlang/OTP ${OTP_VERSION}"
-    wget -qO ${CACHE_DIR}/${OTP_PACKAGE} ${OTP_URL} || exit 1
-    echo "-------> Done"
-
-    # If (in cache) exit this code block
     test -f ${CACHE_DIR}/${LIB_SCTP} || exit 1
     # Not cached, so download and cache dependency
     echo "-------> Fetching Erlang/OTP dependency: libsctp1_1.0.17+dfsg-2_amd64.deb"
+    echo "-------> ${LIB_URL}"
     wget -qO ${CACHE_DIR}/${LIB_SCTP} ${LIB_URL} || exit 1
+    echo "-------> Done"
+
+    # If (in cache) exit this code block
+    test -f ${CACHE_DIR}/${OTP_PACKAGE} && exit
+    # Not cached, so download and cache dependency
+    echo "-------> Fetching Erlang/OTP ${OTP_VERSION}"
+    echo "-------> ${OTP_URL}"
+    wget -qO ${CACHE_DIR}/${OTP_PACKAGE} ${OTP_URL} || exit 1
     echo "-------> Done"
 
     echo "-------> Packages downloaded and cached"
