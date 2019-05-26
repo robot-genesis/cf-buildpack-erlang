@@ -39,7 +39,7 @@ pwd
 ls
 
 echo "Inspecting /tmp/lifecycle/shell"
-cat /tmp/lifecycle/shell
+#cat /tmp/lifecycle/shell
 echo "--- Running --"
 /tmp/lifecycle/shell
 whereis erl
