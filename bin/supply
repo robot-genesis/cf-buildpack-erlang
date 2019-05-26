@@ -41,32 +41,38 @@ LIB_SCTP="libsctp1_1.0.17+dfsg-2_amd64.deb"
 LIB_URL="http://mirrors.kernel.org/ubuntu/pool/main/l/lksctp-tools/${LIB_SCTP}"
 
 ## Check if dependency is cached
-{
-    echo "-------> Checking cache for depenencies"
-    echo "-------> ${CACHE_DIR}"
-    ls -hl ${CACHE_DIR} | sed 's/^/         /'
+#{
+#    echo "-------> Checking cache for depenencies"
+#    echo "-------> ${CACHE_DIR}"
+#    ls -hl ${CACHE_DIR} | sed 's/^/         /'
 
-    # If (in cache) exit this code block
-    test -f ${CACHE_DIR}/${LIB_SCTP} && exit
-    # Not cached, so download and cache dependency
-    echo "-------> Fetching Erlang/OTP dependency: libsctp1_1.0.17+dfsg-2_amd64.deb"
-    echo "-------> ${LIB_URL}"
-    wget -qO ${CACHE_DIR}/${LIB_SCTP} ${LIB_URL} || exit 1
-    echo "-------> Done"
+#    # If (in cache) exit this code block
+#    test -f ${CACHE_DIR}/${LIB_SCTP} && exit
+#    # Not cached, so download and cache dependency
+#    echo "-------> Fetching Erlang/OTP dependency: libsctp1_1.0.17+dfsg-2_amd64.deb"
+#    echo "-------> ${LIB_URL}"
+#    wget -qO ${CACHE_DIR}/${LIB_SCTP} ${LIB_URL} || exit 1
+#    echo "-------> Done"
 
-    # If (in cache) exit this code block
-    test -f ${CACHE_DIR}/${OTP_PACKAGE} && exit
-    # Not cached, so download and cache dependency
-    echo "-------> Fetching Erlang/OTP ${OTP_VERSION}"
-    echo "-------> ${OTP_URL}"
-    wget -qO ${CACHE_DIR}/${OTP_PACKAGE} ${OTP_URL} || exit 1
-    echo "-------> Done"
+#    # If (in cache) exit this code block
+#    test -f ${CACHE_DIR}/${OTP_PACKAGE} && exit
+#    # Not cached, so download and cache dependency
+#    echo "-------> Fetching Erlang/OTP ${OTP_VERSION}"
+#    echo "-------> ${OTP_URL}"
+#    wget -qO ${CACHE_DIR}/${OTP_PACKAGE} ${OTP_URL} || exit 1
+#    echo "-------> Done"
 
-    echo "-------> Packages downloaded and cached"
-}
+#    echo "-------> Packages downloaded and cached"
+#}
 
-echo "-------> Installing Erlang OTP and it's dependencies"
+#echo "-------> Installing Erlang OTP and it's dependencies"
 
 ## Install Erlang OTP
-sudo dpkg -i ${CACHE_DIR}/${LIB_SCTP}
-sudo dpkg --ignore-depends=libwxbase3.0-0v5,libwxgtk3.0-0v5 -i ${CACHE_DIR}/${OTP_PACKAGE}
+#sudo dpkg -i ${CACHE_DIR}/${LIB_SCTP}
+#sudo dpkg --ignore-depends=libwxbase3.0-0v5,libwxgtk3.0-0v5 -i ${CACHE_DIR}/${OTP_PACKAGE}
+
+#mkdir -p ${BUILD_DIR}/erlang
+#dpkg -x ${CACHE_DIR}/${OTP_PACKAGE} ${BUILD_DIR}/erlang
+
+#PATH=/app/erlang/usr/bin:$PATH
+#export PATH
