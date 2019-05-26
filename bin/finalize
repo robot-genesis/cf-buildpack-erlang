@@ -38,6 +38,14 @@ echo "CURRENT_DIR"
 pwd
 ls
 
+echo "Inspecting /tmp/lifecycle/shell"
+cat /tmp/lifecycle/shell
+echo "--- Running --"
+/tmp/lifecycle/shell
+whereis erl
+escript
+
+
 cp ${home_dir}/opt/rebar3 ./app/
 ./app/rebar3 release 2>&1 | sed -u 's/^/       /'
 echo ""
