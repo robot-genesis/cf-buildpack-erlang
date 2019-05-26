@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Called as:
+# ./finalize <build> <cache> <deps> <index>
+
+# build         # The directory for the app
+# cache         # Directory location used to store assests during build process
+# deps          # Directory used to store dependencies provided by intalled buildpacks
+# index         # Nuber representing the ordinal position of the buildpack
+
+# Dependencies are to be stored in {deps}/{index}/
+# Expecpt for <deps>/<index>/ all other directories are read-only
+
+# The <cache> directory is persistent for the final buildpack even after upgrade
+# <cache> diretories provided to non final buildpacks are cleared if buildpack changes
+# -------------------------------------------------------------------------------------
+
+echo "-----> Compiling Erlang applications (finalize)"
+
+set -euo pipefail
+
+BUILD_DIR=$1
+CACHE_DIR=$2
+DEPS_DIR=$3
+DEPS_INDEX=$4
+

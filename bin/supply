@@ -1,0 +1,64 @@
+#!/bin/bash
+
+# Called as:
+# ./supply <build> <cache> <deps> <index>
+
+# build 	# The directory for the app
+# cache 	# Directory location used to store assests during build process
+# deps 		# Directory used to store dependencies provided by intalled buildpacks
+# index 	# Nuber representing the ordinal position of the buildpack
+
+# Dependencies are to be stored in {deps}/{index}/
+# Expecpt for <deps>/<index>/ all other directories are read-only
+
+# The <cache> directory is persistent for the final buildpack even after upgrade
+# <cache> diretories provided to non final buildpacks are cleared if buildpack changes
+# -------------------------------------------------------------------------------------
+
+echo "-----> Handling depenencies (supply)"
+
+set -euo pipefail
+
+BUILD_DIR=$1
+CACHE_DIR=$2
+DEPS_DIR=$3
+DEPS_INDEX=$4
+
+## Erlang -----------------------------------------------------------------------------
+
+OTP_VERSION="21.3.8.2"
+
+if [ -f ${BUILD_DIR}/.preferred_otp_version ]; then
+  OTP_VERSION=$(cat ${BUILD_DIR}/.preferred_otp_version)
+fi
+
+echo "Using Erlang/OTP $OTP_VERSION"
+
+OTP_PACKAGE="esl-erlang_${OTP_VERSION}-1~ubuntu~bionic_amd64.deb"
+OTP_URL="https://packages.erlang-solutions.com/erlang/esl-erlang/FLAVOUR_1_general/${OTP_PACKAGE}"
+
+LIB_SCTP="libsctp1_1.0.17+dfsg-2_amd64.deb"
+LIB_URL="http://mirrors.kernel.org/ubuntu/pool/main/l/lksctp-tools/${LIB_SCTP}"
+
+## Check if dependency is cached
+{
+    # If (in cache) exit this code block
+    test -f ${CACHE_DIR}/${OTP_PACKAGE} && exit
+    # Not cached, so download and cache dependency
+    echo "-------> Fetching Erlang/OTP ${OTP_VERSION}"
+    wget -O ${CACHE_DIR}/${OTP_PACKAGE} ${OTP_URL} || exit 1
+
+
+    # If (in cache) exit this code block
+    test -f ${CACHE_DIR}/${LIB_SCTP} || exit 1
+    # Not cached, so download and cache dependency
+    echo "-------> Fetching Erlang/OTP dependency: libsctp1_1.0.17+dfsg-2_amd64.deb"
+    wget -O ${CACHE_DIR}/${LIB_SCTP} ${LIB_URL} || exit 1
+
+    echo "-------> Packages downloaded and cached"
+}
+
+## Install Erlang OTP
+dpkg -i ${CACHE_DIR}/${LIB_SCTP}
+dpkg --ignore-depends=libwxbase3.0-0v5,libwxgtk3.0-0v5 -i ${CACHE_DIR}/${OTP_PACKAGE}
+
