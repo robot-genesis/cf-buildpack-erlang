@@ -30,8 +30,12 @@ home_dir=$(cd $(dirname $(dirname $0)); pwd)
 
 echo "HOME_DIR: ${home_dir}"
 ls ${home_dir}
+echo "CURRENT_DIR"
+pwd
 
-${home_dir}/opt/rebar3 release 2>&1 | sed -u 's/^/       /'
+
+cp ${home_dir}/opt/rebar3 ./
+./rebar3 release 2>&1 | sed -u 's/^/       /'
 echo ""
 
 if [ ${PIPESTATUS[0]} -ne 0 ]; then
