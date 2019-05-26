@@ -47,7 +47,7 @@ mkdir -p ${ERLROOT}
 tar zxf ${CACHE_DIR}/${OTP_PACKAGE} -C ${ERLROOT} --strip-components=1
 
 echo "-------> Installing Erlang/OTP $OTP_VERSION"
-mkdir ${BUILD_DIR}/erlang
+mkdir -pv ${BUILD_DIR}/erlang
 ${ERLROOT}/Install -minimal ${BUILD_DIR}/erlang
 
 PATH=${BUILD_DIR}/erlang/bin:$PATH
