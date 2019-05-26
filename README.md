@@ -3,23 +3,19 @@
 This is an updated Cloud Foundry build pack for Erlang OTP apps. Apps are built using [Rebar3](http://www.rebar3.org/) which in turn, assumes your Erlang app is a standard OTP app.
 
 
-## Update
+### Update
 
+Loosely based on (https://github.com/ChrisWhealy/cf-buildpack-erlang)
 The following updates have been made:
 
-* Erlang tarballs are downloaded from Heroku Cedar 14 stack
-* Rebar3 is used instead of Rebar2.x
-* Default Erlang OTP version is now `20.1`, not `master`.
+* Erlang OTP .dep package is downloaded from Erlang Solutions
+* Default Erlang OTP version is now `21.3.8.2`, not `20.1`.
 
 ### Select an Erlang version
 
-The Erlang/OTP release version that will be used to build and run your application is now obtained from a dot file called `.preferred_otp_version`.  If this file is missing, the OTP version will default to `20.1`.
+The Erlang/OTP release version that will be used to build and run your application is now obtained from a dot file called `.preferred_otp_version`.  If this file is missing, the OTP version will default to `21.3.8.2`.
 
-If this file can be found in the root directory of your repo, it must contain only the OTP version number you require.  Pre-compiled binaries from version from `17.0` upwards are available from the Cedar 14 stack.
-
-#### Example
-
-If your `.preferred_otp_version` file contains `19.2`, then the file `OTP-19.2.tar.gz` will be downloaded from `https://s3.amazonaws.com/heroku-buildpack-elixir/erlang/cedar-14/`.
+If this file can be found in the root directory of your repo, it must contain only the OTP version number you require.
 
 ### Create an Erlang Release
 
@@ -54,5 +50,5 @@ You must use the `foreground` command to start your app, not the `start` command
 
 ### Build your CF App
 
-    $ cf push <app_name> -b https://github.com/ChrisWhealy/cf-buildpack-erlang
+    $ cf push <app_name> -b https://github.com/robot-genesis/cf-buildpack-erlang
   
