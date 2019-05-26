@@ -68,6 +68,5 @@ LIB_URL="http://mirrors.kernel.org/ubuntu/pool/main/l/lksctp-tools/${LIB_SCTP}"
 echo "-------> Installing Erlang OTP and it's dependencies"
 
 ## Install Erlang OTP
-dpkg -i ${CACHE_DIR}/${LIB_SCTP}
-dpkg --ignore-depends=libwxbase3.0-0v5,libwxgtk3.0-0v5 -i ${CACHE_DIR}/${OTP_PACKAGE}
-
+sudo dpkg -i ${CACHE_DIR}/${LIB_SCTP}
+sudo dpkg --ignore-depends=libwxbase3.0-0v5,libwxgtk3.0-0v5 -i ${CACHE_DIR}/${OTP_PACKAGE}
