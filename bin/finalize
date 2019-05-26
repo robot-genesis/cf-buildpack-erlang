@@ -34,6 +34,7 @@ OTP_PACKAGE="OTP-${OTP_VERSION}.tar.gz"
 
 # --------------------
 
+REBAR_CACHE_DIR="${CACHE_DIR}/rebar"
 home_dir=$(cd $(dirname $(dirname $0)); pwd)
 ERLROOT=${BUILD_DIR}/otp
 PROFILE=${BUILD_DIR}/.profile.d
@@ -61,8 +62,7 @@ if [ ! -e "rebar3" ]; then
 fi
 
 echo "-------> Building with Rebar3"
-unset GIT_DIR
-./rebar3 release 2>&1 | sed -u 's/^/         /'
+./rebar3 release 2>&1 | sed -u 's/^/   /'
 
 if [ ${PIPESTATUS[0]} -ne 0 ]; then
   echo "-----> Build failed"
@@ -75,6 +75,9 @@ if [ -f ${home_dir}/opt/otp.sh ]; then
 fi
 
 echo "-------> Build succeeded"
+echo $PATH
+
+
 exit 0
 
 echo "-------> Extracting Erlang OTP"
@@ -95,7 +98,6 @@ ${ERL_ROOT}/Install -minimal /app/erlang
 
 PATH=/app/erlang/bin:$PATH
 export PATH
-
 
 
 REBAR_CACHE_DIR="${CACHE_DIR}/rebar"
