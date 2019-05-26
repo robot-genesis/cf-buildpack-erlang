@@ -73,6 +73,7 @@ echo "-------> Extracting Erlang OTP"
 #sudo dpkg --ignore-depends=libwxbase3.0-0v5,libwxgtk3.0-0v5 -i ${CACHE_DIR}/${OTP_PACKAGE}
 
 ERL_ROOT=${BUILD_DIR}/erlang
+PROFILE=${BUILD_DIR}/.profile.d
 
 mkdir -p ${ERL_ROOT}
 tar zxf ${CACHE_DIR}/${OTP_PACKAGE} -C ${ERL_ROOT} --strip-components=1

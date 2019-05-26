@@ -38,16 +38,9 @@ echo "CURRENT_DIR"
 pwd
 ls
 
-echo "Inspecting /tmp/lifecycle/shell"
-#cat /tmp/lifecycle/shell
-echo "--- Running --"
-/tmp/lifecycle/shell
-whereis erl
-escript
-
-
-cp ${home_dir}/opt/rebar3 ./app/
-./app/rebar3 release 2>&1 | sed -u 's/^/       /'
+echo "-------> Building with rebar3"
+cp ${home_dir}/opt/rebar3 ${BUILD_DIR}/
+${BUILD_DIR}/rebar3 release 2>&1 | sed -u 's/^/       /'
 echo ""
 
 if [ ${PIPESTATUS[0]} -ne 0 ]; then
