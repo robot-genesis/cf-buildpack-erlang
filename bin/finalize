@@ -32,6 +32,9 @@ echo "HOME_DIR: ${home_dir}"
 ls ${home_dir}
 echo "CURRENT_DIR"
 pwd
+ls
+echo "ls /usr/lib/"
+ls /usr/lib/
 
 whereis erl
 whereis escript
