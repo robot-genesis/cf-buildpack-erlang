@@ -15,7 +15,7 @@
 # <cache> diretories provided to non final buildpacks are cleared if buildpack changes
 # -------------------------------------------------------------------------------------
 
-echo "-----> Handling depenencies (supply)"
+echo "-------> Handling depenencies (supply)"
 
 set -euo pipefail
 
@@ -57,6 +57,8 @@ LIB_URL="http://mirrors.kernel.org/ubuntu/pool/main/l/lksctp-tools/${LIB_SCTP}"
 
     echo "-------> Packages downloaded and cached"
 }
+
+echo "-------> Installing Erlang OTP and it's dependencies"
 
 ## Install Erlang OTP
 dpkg -i ${CACHE_DIR}/${LIB_SCTP}

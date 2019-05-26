@@ -15,7 +15,7 @@
 # <cache> diretories provided to non final buildpacks are cleared if buildpack changes
 # -------------------------------------------------------------------------------------
 
-echo "-----> Compiling Erlang applications (finalize)"
+echo "-------> Compiling Erlang applications (finalize)"
 
 set -euo pipefail
 
@@ -24,3 +24,14 @@ CACHE_DIR=$2
 DEPS_DIR=$3
 DEPS_INDEX=$4
 
+REBAR_CACHE_DIR="${CACHE_DIR}/rebar"
+
+opt/rebar3 release 2>&1 | sed -u 's/^/       /'
+echo ""
+
+if [ ${PIPESTATUS[0]} -ne 0 ]; then
+  echo "-------> Build failed"
+  exit 1
+fi
+
+echo "-------> Build succeded"
