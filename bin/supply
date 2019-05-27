@@ -46,7 +46,7 @@ OTP_URL="https://s3.amazonaws.com/heroku-buildpack-elixir/erlang/cedar-14/${OTP_
 #ls -hl ${CACHE_DIR} | sed 's/^/         /'
 
 
-if [! -f ${CACHE_DIR}/${OTP_PACKAGE}] # If not cached
+if [ ! -f ${CACHE_DIR}/${OTP_PACKAGE} ] # If not cached
 then
     # Not cached, so download and cache dependency
     echo "-------> Fetching Erlang/OTP ${OTP_VERSION}"
