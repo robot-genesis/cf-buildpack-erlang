@@ -45,21 +45,16 @@ PROFILE=${BUILD_DIR}/.profile.d
 echo "-------> Unpacking Erlang/OTP ${CACHE_DIR}/${OTP_PACKAGE}"
 mkdir -p ${ERLROOT}
 tar zxf ${CACHE_DIR}/${OTP_PACKAGE} -C ${ERLROOT} --strip-components=1
+ln -s ${ERLROOT} /app/otp
+${ERLROOT}/Install -minimal /app/otp
 
-echo "-------> Installing Erlang/OTP $OTP_VERSION"
-mkdir -pv ${BUILD_DIR}/erlang
-${ERLROOT}/Install -minimal ${BUILD_DIR}/erlang
-
-PATH=${BUILD_DIR}/erlang/bin:$PATH
+PATH=/app/otp/bin:$PATH
 export PATH
 
-# Does rebar3 already exist?
-if [ ! -e "rebar3" ]; then
-  echo "-------> Installing Rebar from buildpack"
-  cp ${home_dir}/opt/rebar3 ${BUILD_DIR}
-fi
-
 cd ${BUILD_DIR}
+
+echo "-------> Installing Rebar from buildpack"
+cp ${home_dir}/opt/rebar3 ${BUILD_DIR} ./
 
 echo "-------> Building with Rebar3"
 ./rebar3 release 2>&1 | sed -u 's/^/    /'
@@ -71,7 +66,6 @@ fi
 
 echo "-------> Build succeeded"
 echo $PATH
-
 
 exit 0
 
