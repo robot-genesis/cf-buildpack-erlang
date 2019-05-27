@@ -48,13 +48,18 @@ tar zxf ${CACHE_DIR}/${OTP_PACKAGE} -C ${ERLROOT} --strip-components=1
 ln -s ${ERLROOT} /app/otp
 ${ERLROOT}/Install -minimal /app/otp
 
+echo "ls app"
+ls -hal app
+echo "ls app/otp"
+ls -hal app/otp
+
 PATH=/app/otp/bin:$PATH
 export PATH
 
 cd ${BUILD_DIR}
 
 echo "-------> Installing Rebar from buildpack"
-cp ${home_dir}/opt/rebar3 ${BUILD_DIR} ./
+cp ${home_dir}/opt/rebar3 ./
 
 echo "-------> Building with Rebar3"
 ./rebar3 release 2>&1 | sed -u 's/^/    /'
