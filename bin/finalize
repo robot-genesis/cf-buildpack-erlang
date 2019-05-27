@@ -34,8 +34,11 @@ OTP_PACKAGE="OTP-${OTP_VERSION}.tar.gz"
 
 # --------------------
 
-home_dir=$(cd $(dirname $(dirname $0)); pwd)
+BUILDPACK=$(cd $(dirname $(dirname $0)); pwd)
 PROFILE=${BUILD_DIR}/.profile.d
+
+PATH=/app/otp/bin:$PATH
+export PATH
 
 # --------------------
 
@@ -47,6 +50,7 @@ echo "-------> Building with Rebar3"
 REBAR_CACHE_DIR="${CACHE_DIR}/rebar"
 mkdir -p ${REBAR_CACHE_DIR}
 export REBAR_CACHE_DIR
+
 ./rebar3 release 2>&1 | sed -u 's/^/    /'
 
 if [ ${PIPESTATUS[0]} -ne 0 ]; then
@@ -54,13 +58,12 @@ if [ ${PIPESTATUS[0]} -ne 0 ]; then
   exit 1
 fi
 
-if [ -f ${home_dir}/opt/otp.sh ]; then
+if [ -f ${BUILDPACK}/opt/otp.sh ]; then
   mkdir -p ${PROFILE}
-  cp ${home_dir}/opt/otp.sh ${PROFILE}
+  cp ${BUILDPACK}/opt/otp.sh ${PROFILE}
 fi
 
 echo "-------> Build succeeded"
-echo $PATH
 
 exit 0
 
