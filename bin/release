@@ -1,7 +1,9 @@
 #!/bin/bash
 # bin/release <build-dir>
 
-#echo "default_process_types:"
-#echo "  web: /home/vcap/app/_build/default/rel/automata/bin/automata foreground"
 echo ""
 
+# TODO: Run escript that reads rebar.config -> {relx, [{release, {<name>, <version>}, []}]}
+
+#echo "default_process_types:"
+#echo "  web: /home/vcap/app/_build/default/rel/<name>/bin/<name> foreground"
