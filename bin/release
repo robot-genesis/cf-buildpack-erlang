@@ -1,6 +1,7 @@
 #!/bin/bash
 # bin/release <build-dir>
 
-echo "default_process_types:"
-echo "  web: /home/vcap/app/_build/default/rel/automata/bin/automata foreground"
+#echo "default_process_types:"
+#echo "  web: /home/vcap/app/_build/default/rel/automata/bin/automata foreground"
+echo ""
 

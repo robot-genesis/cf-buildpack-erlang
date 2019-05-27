@@ -52,7 +52,7 @@ ls -hal app
 echo "ls app/otp"
 ls -hal app/otp
 
-PATH=app/otp/bin:$PATH
+PATH=/app/otp/bin:$PATH
 export PATH
 
 cd ${BUILD_DIR}
