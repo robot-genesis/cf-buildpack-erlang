@@ -70,7 +70,7 @@ export PATH
 echo "-------> Fetching application dependencies with Rebar3"
 
 cd ${BUILD_DIR}
-cp ${home_dir}/opt/rebar3 ./
+cp ${BUILDPACK}/opt/rebar3 ./
 
 REBAR_CACHE_DIR="${CACHE_DIR}/rebar"
 
