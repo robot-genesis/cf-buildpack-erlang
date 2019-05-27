@@ -39,26 +39,24 @@ echo "-------> Using Erlang/OTP $OTP_VERSION"
 OTP_PACKAGE="OTP-${OTP_VERSION}.tar.gz"
 OTP_URL="https://s3.amazonaws.com/heroku-buildpack-elixir/erlang/cedar-14/${OTP_PACKAGE}"
 
-## Check if dependency is cached
-{
-    echo "-------> Checking cache for depenencies"
-    echo "-------> ${CACHE_DIR}"
-    ls -hl ${CACHE_DIR} | sed 's/^/         /'
 
-    # If (in cache) exit this code block
-    test -f ${CACHE_DIR}/${OTP_PACKAGE} && exit
+## Check if dependency is cached
+#echo "-------> Checking cache for depenencies"
+#echo "-------> ${CACHE_DIR}"
+#ls -hl ${CACHE_DIR} | sed 's/^/         /'
+
+
+if [! -f ${CACHE_DIR}/${OTP_PACKAGE}] # If not cached
+then
     # Not cached, so download and cache dependency
     echo "-------> Fetching Erlang/OTP ${OTP_VERSION}"
     echo "-------> ${OTP_URL}"
     wget -qO ${CACHE_DIR}/${OTP_PACKAGE} ${OTP_URL} || exit 1
     echo "-------> Done"
+fi
 
-    echo "-------> Packages downloaded and cached"
-}
-echo "-------> All dependencies are present"
+echo "-------> Installing Erlang/OTP ${OTP_PACKAGE}"
 
-
-echo "-------> Unpacking Erlang/OTP ${CACHE_DIR}/${OTP_PACKAGE}"
 ERLROOT=${BUILD_DIR}/otp
 mkdir -p ${ERLROOT}
 tar zxf ${CACHE_DIR}/${OTP_PACKAGE} -C ${ERLROOT} --strip-components=1
@@ -70,6 +68,7 @@ export PATH
 
 
 echo "-------> Fetching application dependencies with Rebar3"
+
 cd ${BUILD_DIR}
 cp ${home_dir}/opt/rebar3 ./
 
