@@ -34,7 +34,6 @@ OTP_PACKAGE="OTP-${OTP_VERSION}.tar.gz"
 
 # --------------------
 
-REBAR_CACHE_DIR="${CACHE_DIR}/rebar"
 home_dir=$(cd $(dirname $(dirname $0)); pwd)
 ERLROOT=${BUILD_DIR}/otp
 PROFILE=${BUILD_DIR}/.profile.d
@@ -53,7 +52,7 @@ ls -hal app
 echo "ls app/otp"
 ls -hal app/otp
 
-PATH=/app/otp/bin:$PATH
+PATH=app/otp/bin:$PATH
 export PATH
 
 cd ${BUILD_DIR}
@@ -62,6 +61,10 @@ echo "-------> Installing Rebar from buildpack"
 cp ${home_dir}/opt/rebar3 ./
 
 echo "-------> Building with Rebar3"
+
+REBAR_CACHE_DIR="${CACHE_DIR}/rebar"
+mkdir ${REBAR_CACHE_DIR}
+export REBAR_CACHE_DIR
 ./rebar3 release 2>&1 | sed -u 's/^/    /'
 
 if [ ${PIPESTATUS[0]} -ne 0 ]; then
