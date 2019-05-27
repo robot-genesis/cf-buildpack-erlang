@@ -24,9 +24,11 @@ CACHE_DIR=$2
 DEPS_DIR=$3
 DEPS_INDEX=$4
 
+BUILDPACK=$(cd $(dirname $(dirname $0)); pwd)
+
 ## Erlang -----------------------------------------------------------------------------
 
-OTP_VERSION="21.3.8.2"
+OTP_VERSION="21.3.7"
 
 if [ -f ${BUILD_DIR}/.preferred_otp_version ]; then
   OTP_VERSION=$(cat ${BUILD_DIR}/.preferred_otp_version)
@@ -55,3 +57,30 @@ OTP_URL="https://s3.amazonaws.com/heroku-buildpack-elixir/erlang/cedar-14/${OTP_
 }
 echo "-------> All dependencies are present"
 
+
+echo "-------> Unpacking Erlang/OTP ${CACHE_DIR}/${OTP_PACKAGE}"
+ERLROOT=${BUILD_DIR}/otp
+mkdir -p ${ERLROOT}
+tar zxf ${CACHE_DIR}/${OTP_PACKAGE} -C ${ERLROOT} --strip-components=1
+ln -s ${ERLROOT} /app/otp
+${ERLROOT}/Install -minimal /app/otp
+
+PATH=/app/otp/bin:$PATH
+export PATH
+
+
+echo "-------> Fetching application dependencies with Rebar3"
+cd ${BUILD_DIR}
+cp ${home_dir}/opt/rebar3 ./
+
+REBAR_CACHE_DIR="${CACHE_DIR}/rebar"
+
+mkdir -p ${REBAR_CACHE_DIR}
+export REBAR_CACHE_DIR
+./rebar3 get-deps 2>&1 | sed -u 's/^/    /'
+
+if [ ${PIPESTATUS[0]} -ne 0 ]; then
+  echo "-------> Build failed"
+  exit 1
+fi
+echo "-------> Done"
