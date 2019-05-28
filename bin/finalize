@@ -61,35 +61,17 @@ cp ${BUILDPACK}/opt/otp.sh ${PROFILE}
 
 echo "-------> Build succeeded"
 
-echo "Current folder"
-pwd
-
-echo "/tmp"
-ls /tmp
-
-echo "/tmp/lifecycle"
-ls /tmp/lifecycle
-
 echo "Running /tmp/lifecycle/shell"
 /tmp/lifecycle/shell
 
-echo "Parent"
+echo "Current folder"
+pwd
+
+echo "Parent .."
 ls ..
 
 echo "Home"
 ls /home
-
-echo "/home/vcap"
-ls /home/vcap
-
-echo "/var"
-ls /var
-
-echo "/var/vcap"
-ls /var/vcap
-
-echo "Running /tmp/lifecycle/shell"
-/tmp/lifecycle/shell
 
 echo "/home/vcap"
 ls /home/vcap
