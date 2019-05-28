@@ -10,10 +10,14 @@ export PATH
 cd ${BUILD_DIR}
 cp ${BUILDPACK}/opt/procfile.escript ./
 
-# Ouputs a Procfile if an OTP Release is found
-./procfile.escript
 
-if [ ${PIPESTATUS[0]} -ne 0 ]; then
-  # Can't generate a Procfile for an OTP Release
-  echo ""
+## Procfile ------------------------------------------------------------------------------
+if [ ! -f Procfile ]; then # If no Procfile
+  # Ouputs a Procfile if an OTP Release is found
+  ./procfile.escript
+
+  if [ ${PIPESTATUS[0]} -ne 0 ]; then
+    # Can't generate a Procfile for an OTP Release
+    echo ""
+  fi
 fi
