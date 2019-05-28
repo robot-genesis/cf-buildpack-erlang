@@ -22,10 +22,8 @@ CACHE_DIR=$2
 DEPS_DIR=$3
 DEPS_INDEX=$4
 BUILDPACK=$(cd $(dirname $(dirname $0)); pwd)
+## -----------
 
-## ------------------------------------------------------------------------------------
-
-echo "-------> supply <-------"
 
 ## Cache ------------------------------------------------------------------------------
 
@@ -33,8 +31,7 @@ if [ -f ${BUILD_DIR}/.clean_cache ]; then
   echo "-------> Discarting previously cached depenencies"
   rm -r ${CACHE_DIR}/*
 fi
-
-## ------------------------------------------------------------------------------------
+## -----------
 
 
 ## Erlang  Runtime --------------------------------------------------------------------
@@ -59,5 +56,39 @@ then
     wget -qO ${CACHE_DIR}/${OTP_PACKAGE} ${OTP_URL} || exit 1
     echo "-------> Done"
 fi
+## -----------
+
 
 ## ------------------------------------------------------------------------------------
+echo "-------> Installing Erlang/OTP ${OTP_PACKAGE}"
+
+ERLROOT=${BUILD_DIR}/otp
+mkdir -p ${ERLROOT}
+tar zxf ${CACHE_DIR}/${OTP_PACKAGE} -C ${ERLROOT} --strip-components=1
+ln -s ${ERLROOT} /app/otp
+${ERLROOT}/Install -minimal /app/otp
+cp ${BUILDPACK}/opt/rebar3 ${BUILD_DIR}
+## -----------
+
+
+## ------------------------------------------------------------------------------------
+# Enable the use of the just intalled Erlang OTP
+PATH=/app/otp/bin:$PATH
+export PATH
+cd ${BUILD_DIR}
+## -----------
+
+
+## ------------------------------------------------------------------------------------
+echo "-------> Getting Erlang application dependencies using Rebar3"
+
+REBAR_CACHE_DIR="${CACHE_DIR}/rebar"
+mkdir -p ${REBAR_CACHE_DIR}
+export REBAR_CACHE_DIR
+./rebar3 get-deps 2>&1 | sed -u 's/^/    /'
+
+if [ ${PIPESTATUS[0]} -ne 0 ]; then
+  echo "-------> Rebar3 dependencies failed"
+  exit 1
+fi
+## -----------

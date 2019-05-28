@@ -28,19 +28,6 @@ if [ -f ${BUILD_DIR}/.preferred_otp_version ]; then
   OTP_VERSION=$(cat ${BUILD_DIR}/.preferred_otp_version)
 fi
 OTP_PACKAGE="OTP-${OTP_VERSION}.tar.gz"
-
-echo "-------> finalize <-------"
-## ------------------------------
-
-## ------------------------------------------------------------------------------------
-echo "-------> Installing Erlang/OTP ${OTP_PACKAGE}"
-
-ERLROOT=${BUILD_DIR}/otp
-mkdir -p ${ERLROOT}
-tar zxf ${CACHE_DIR}/${OTP_PACKAGE} -C ${ERLROOT} --strip-components=1
-ln -s ${ERLROOT} /app/otp
-${ERLROOT}/Install -minimal /app/otp
-cp ${BUILDPACK}/opt/rebar3 ${BUILD_DIR}
 ## -----------
 
 

@@ -8,7 +8,7 @@ BUILDPACK=$(cd $(dirname $(dirname $0)); pwd)
 PATH=/app/otp/bin:$PATH
 export PATH
 cd ${BUILD_DIR}
-cp ${BUILDPACK}/opt/procfile.escript ${BUILD_DIR}
+cp ${BUILDPACK}/opt/procfile.escript ./
 
 # Ouputs a Procfile if an OTP Release is found
 ./procfile.escript
