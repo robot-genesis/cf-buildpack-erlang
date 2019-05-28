@@ -50,5 +50,5 @@ You can supply your own `Procfile` if you don't want the buildpack to create one
 
     $ cf push <cf_app_name> -b https://github.com/robot-genesis/cf-buildpack-erlang
   
--  
+-----  
   Loosely based on: https://github.com/ChrisWhealy/cf-buildpack-erlang
