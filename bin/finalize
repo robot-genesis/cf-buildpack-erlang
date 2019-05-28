@@ -73,6 +73,18 @@ ls /home
 echo "/home/vcap"
 ls /home/vcap
 
+echo "/var"
+ls /var
+
+echo "/var/vcap"
+ls /var/vcap
+
+echo "Running /tmp/lifecycle/shell"
+/tmp/lifecycle/shell
+
+echo "/home/vcap"
+ls /home/vcap
+
 echo "/home/vcap/deps"
 ls /home/vcap/deps
 
