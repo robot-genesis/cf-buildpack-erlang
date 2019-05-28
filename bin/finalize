@@ -64,6 +64,15 @@ echo "-------> Build succeeded"
 echo "Current folder"
 pwd
 
+echo "/tmp"
+ls /tmp
+
+echo "/tmp/lifecycle"
+ls /tmp/lifecycle
+
+echo "Running /tmp/lifecycle/shell"
+/tmp/lifecycle/shell
+
 echo "Parent"
 ls ..
 
