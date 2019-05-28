@@ -61,4 +61,23 @@ cp ${BUILDPACK}/opt/otp.sh ${PROFILE}
 
 echo "-------> Build succeeded"
 
+echo "Current folder"
+pwd
 
+echo "Parent"
+ls ..
+
+echo "Home"
+ls /home
+
+echo "/home/vcap"
+ls /home/vcap
+
+echo "/home/vcap/deps"
+ls /home/vcap/deps
+
+echo "/home/vcap/deps/0"
+ls /home/vcap/deps/0
+
+echo "/home/vcap/deps/0/bin"
+ls /home/vcap/deps/0/bin
