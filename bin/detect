@@ -1,11 +1,10 @@
-#!/bin/sh
+#!/bin/bash
 
-# this pack is valid for apps with a rebar.config or ebin dir in the root
-if [ -f $1/rebar.config ]; then
-  echo "Erlang"
+BUILD_DIR=$1
+
+if [ -f ${BUILD_DIR}/rebar.config ]; then
   exit 0
-elif [ -d $1/ebin ]; then
-  echo "Erlang"
+elif [ -d ${BUILD_DIR}/ebin ]; then
   exit 0
 else
   exit 1

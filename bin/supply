@@ -15,18 +15,29 @@
 # <cache> diretories provided to non final buildpacks are cleared if buildpack changes
 # -------------------------------------------------------------------------------------
 
-echo "-------> Handling depenencies (supply)"
-
 set -euo pipefail
 
 BUILD_DIR=$1
 CACHE_DIR=$2
 DEPS_DIR=$3
 DEPS_INDEX=$4
-
 BUILDPACK=$(cd $(dirname $(dirname $0)); pwd)
 
-## Erlang -----------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------
+
+echo "-------> supply <-------"
+
+## Cache ------------------------------------------------------------------------------
+
+if [ -f ${BUILD_DIR}/.clean_cache ]; then
+  echo "-------> Discarting previously cached depenencies"
+  rm -r ${CACHE_DIR}/*
+fi
+
+## ------------------------------------------------------------------------------------
+
+
+## Erlang  Runtime --------------------------------------------------------------------
 
 OTP_VERSION="21.3.7"
 
@@ -38,13 +49,7 @@ echo "-------> Using Erlang/OTP $OTP_VERSION"
 
 OTP_PACKAGE="OTP-${OTP_VERSION}.tar.gz"
 OTP_URL="https://s3.amazonaws.com/heroku-buildpack-elixir/erlang/cedar-14/${OTP_PACKAGE}"
-
-
-## Check if dependency is cached
-#echo "-------> Checking cache for depenencies"
-#echo "-------> ${CACHE_DIR}"
-#ls -hl ${CACHE_DIR} | sed 's/^/         /'
-
+#OTP_URL="http://packages.erlang-solutions.com/debian/pool/erlang-base-hipe_${OTP_VERSION}-1~ubuntu~bionic_amd64.deb"
 
 if [ ! -f ${CACHE_DIR}/${OTP_PACKAGE} ] # If not cached
 then
@@ -55,31 +60,4 @@ then
     echo "-------> Done"
 fi
 
-echo "-------> Installing Erlang/OTP ${OTP_PACKAGE}"
-
-ERLROOT=${BUILD_DIR}/otp
-mkdir -p ${ERLROOT}
-tar zxf ${CACHE_DIR}/${OTP_PACKAGE} -C ${ERLROOT} --strip-components=1
-ln -s ${ERLROOT} /app/otp
-${ERLROOT}/Install -minimal /app/otp
-
-PATH=/app/otp/bin:$PATH
-export PATH
-
-
-echo "-------> Fetching application dependencies with Rebar3"
-
-cd ${BUILD_DIR}
-cp ${BUILDPACK}/opt/rebar3 ./
-
-REBAR_CACHE_DIR="${CACHE_DIR}/rebar"
-
-mkdir -p ${REBAR_CACHE_DIR}
-export REBAR_CACHE_DIR
-./rebar3 get-deps 2>&1 | sed -u 's/^/    /'
-
-if [ ${PIPESTATUS[0]} -ne 0 ]; then
-  echo "-------> Build failed"
-  exit 1
-fi
-echo "-------> Done"
+## ------------------------------------------------------------------------------------

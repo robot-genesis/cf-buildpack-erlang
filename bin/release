@@ -1,9 +1,18 @@
 #!/bin/bash
 # bin/release <build-dir>
 
-echo ""
+BUILD_DIR=$1
+BUILDPACK=$(cd $(dirname $(dirname $0)); pwd)
 
-# TODO: Run escript that reads rebar.config -> {relx, [{release, {<name>, <version>}, []}]}
+# Enable the use of the just intalled Erlang OTP
+PATH=/app/otp/bin:$PATH
+export PATH
+cd ${BUILD_DIR}
 
-#echo "default_process_types:"
-#echo "  web: /home/vcap/app/_build/default/rel/<name>/bin/<name> foreground"
+# Ouputs a Procfile if an OTP Release is found
+${BUILDPACK}/procfile.escript
+
+if [ ${PIPESTATUS[0]} -ne 0 ]; then
+  # Can't generate a Procfile for an OTP Release
+  echo ""
+fi

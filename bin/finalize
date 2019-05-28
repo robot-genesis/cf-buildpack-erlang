@@ -15,60 +15,63 @@
 # <cache> diretories provided to non final buildpacks are cleared if buildpack changes
 # -------------------------------------------------------------------------------------
 
-echo "-------> Compiling Erlang applications (finalize)"
-
 set -euo pipefail
 
 BUILD_DIR=$1
 CACHE_DIR=$2
 DEPS_DIR=$3
 DEPS_INDEX=$4
+BUILDPACK=$(cd $(dirname $(dirname $0)); pwd)
 
 OTP_VERSION="21.3.7"
-
 if [ -f ${BUILD_DIR}/.preferred_otp_version ]; then
   OTP_VERSION=$(cat ${BUILD_DIR}/.preferred_otp_version)
 fi
-
 OTP_PACKAGE="OTP-${OTP_VERSION}.tar.gz"
 
-# --------------------
+echo "-------> finalize <-------"
+## ------------------------------
 
-BUILDPACK=$(cd $(dirname $(dirname $0)); pwd)
-PROFILE=${BUILD_DIR}/.profile.d
+## ------------------------------------------------------------------------------------
+echo "-------> Installing Erlang/OTP ${OTP_PACKAGE}"
 
+ERLROOT=${BUILD_DIR}/otp
+mkdir -p ${ERLROOT}
+tar zxf ${CACHE_DIR}/${OTP_PACKAGE} -C ${ERLROOT} --strip-components=1
+ln -s ${ERLROOT} /app/otp
+${ERLROOT}/Install -minimal /app/otp
+cp ${BUILDPACK}/opt/rebar3 ${BUILD_DIR}
+## -----------
+
+
+## ------------------------------------------------------------------------------------
+echo "-------> Compiling Erlang application"
+
+# Enable the use of the just intalled Erlang OTP
 PATH=/app/otp/bin:$PATH
 export PATH
-
-# --------------------
-
-
 cd ${BUILD_DIR}
+## -----------
 
-echo "-------> Building with Rebar3"
-
+# Compile the Erlang application using Rebar3
 REBAR_CACHE_DIR="${CACHE_DIR}/rebar"
 mkdir -p ${REBAR_CACHE_DIR}
 export REBAR_CACHE_DIR
-
 ./rebar3 release 2>&1 | sed -u 's/^/    /'
 
 if [ ${PIPESTATUS[0]} -ne 0 ]; then
   echo "-------> Build failed"
   exit 1
 fi
+## -----------
 
-if [ -f ${BUILDPACK}/opt/otp.sh ]; then
-  mkdir -p ${PROFILE}
-  cp ${BUILDPACK}/opt/otp.sh ${PROFILE}
-fi
+
+# Prepare droplet's PATH
+PROFILE=${BUILD_DIR}/.profile.d
+mkdir -p ${PROFILE}
+cp ${BUILDPACK}/opt/otp.sh ${PROFILE}
+## -----------
 
 echo "-------> Build succeeded"
 
-exit 0
 
-#echo "-------> Extracting Erlang OTP"
-
-## Install Erlang OTP
-#sudo dpkg -i ${CACHE_DIR}/${LIB_SCTP}
-#sudo dpkg --ignore-depends=libwxbase3.0-0v5,libwxgtk3.0-0v5 -i ${CACHE_DIR}/${OTP_PACKAGE}
