@@ -8,9 +8,10 @@ BUILDPACK=$(cd $(dirname $(dirname $0)); pwd)
 PATH=/app/otp/bin:$PATH
 export PATH
 cd ${BUILD_DIR}
+cp ${BUILDPACK}/opt/procfile.escript ${BUILD_DIR}
 
 # Ouputs a Procfile if an OTP Release is found
-${BUILDPACK}/procfile.escript
+./procfile.escript
 
 if [ ${PIPESTATUS[0]} -ne 0 ]; then
   # Can't generate a Procfile for an OTP Release
