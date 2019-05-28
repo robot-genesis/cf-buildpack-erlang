@@ -16,6 +16,6 @@ main(_Args) ->
 print_procfile(Release) ->
   {release, {AtomName, _Version}, _Properties} = Release,
   io:format("default_process_types:~n"),
-  io:format("  web: /home/vcap/app/_build/default/rel/~s/bin/~s foreground~n", [AtomName, AtomName]).
+  io:format("  web: /home/vcap/app/_build/default/rel/~s/bin/~s~n", [AtomName, AtomName]).
 
 
